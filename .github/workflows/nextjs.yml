@@ -8,29 +8,27 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    - name: Checkout
+      uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-          cache: 'npm'
-          cache-dependency-path: 'ui-nextjs/package-lock.json'
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 18
 
-      - name: Install and Build
-        run: |
-          cd ui-nextjs
-          npm install
-          npm run build
+    - name: Install dependencies
+      run: |
+        cd ui-nextjs
+        npm install
 
-      - name: Prepare deployment
-        run: |
-          cd ui-nextjs/out
-          touch .nojekyll
+    - name: Build project
+      run: |
+        cd ui-nextjs
+        npm run build
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./ui-nextjs/out
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./ui-nextjs/out
+        force_orphan: true
